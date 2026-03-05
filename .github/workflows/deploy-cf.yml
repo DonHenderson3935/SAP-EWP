@@ -1,0 +1,55 @@
+name: Deploy to SAP BTP Cloud Foundry
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy ewp-server
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download ewp-core server binary
+        run: |
+          curl -fsSL \
+            https://github.com/justinwoo280/ech-workers/releases/download/v1.13/ewp-core-server-v1.13-linux-amd64 \
+            -o ewp-server
+          chmod +x ewp-server
+
+      - name: Install CF CLI
+        run: |
+          wget -q -O - https://packages.cloudfoundry.org/debian/cli.cloudfoundry.org.key | sudo apt-key add -
+          echo "deb https://packages.cloudfoundry.org/debian stable main" | sudo tee /etc/apt/sources.list.d/cloudfoundry-cli.list
+          sudo apt-get update && sudo apt-get install -y cf8-cli
+
+      - name: Login to SAP BTP Cloud Foundry
+        run: |
+          cf api "${{ secrets.CF_API }}"
+          cf auth "${{ secrets.CF_USERNAME }}" "${{ secrets.CF_PASSWORD }}"
+          cf target -o "${{ secrets.CF_ORG }}" -s "${{ secrets.CF_SPACE }}"
+
+      - name: Set UUID env on CF app (if not set)
+        run: |
+          cf set-env ewp-server UUID "${{ secrets.EWP_UUID }}" || true
+
+      - name: Push app
+        run: |
+          cf push ewp-server \
+            -f manifest.yml \
+            --no-start
+
+      - name: Set UUID and start
+        run: |
+          cf set-env ewp-server UUID "${{ secrets.EWP_UUID }}"
+          cf set-env ewp-server WS_PATH "${{ secrets.EWP_WS_PATH }}"
+          cf start ewp-server
+
+      - name: Show app info
+        run: |
+          cf app ewp-server
+          echo "Routes:"
+          cf routes | grep ewp-server
