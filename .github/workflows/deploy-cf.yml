@@ -52,7 +52,7 @@ jobs:
       - name: Set envs and start
         run: |
           cf set-env ewp-server UUID "${{ secrets.EWP_UUID }}"
-          cf set-env ewp-server GRPC_SERVICE "${{ secrets.EWP_GRPC_SERVICE }}"
+          cf set-env ewp-server WS_PATH "${{ secrets.EWP_WS_PATH }}"
           if [ -n "${{ secrets.CLOUDFLARED_TOKEN }}" ]; then
             cf set-env ewp-server CLOUDFLARED_TOKEN "${{ secrets.CLOUDFLARED_TOKEN }}"
           fi
