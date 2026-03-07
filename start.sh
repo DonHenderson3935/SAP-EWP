@@ -20,11 +20,6 @@ cat > config.json << CFEOF
     "type": "ewp",
     "uuid": "${UUID}",
     "enable_flow": true
-  },
-  "advanced": {
-    "padding_min": 100,
-    "padding_max": 1000,
-    "sse_headers": true
   }
 }
 CFEOF
