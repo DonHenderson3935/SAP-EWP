@@ -32,16 +32,4 @@ CFEOF
 echo "[ewp] config.json generated"
 
 chmod +x ./ewp-server
-
-if [ -n "${CLOUDFLARED_TOKEN}" ]; then
-  echo "[cloudflare] CLOUDFLARED_TOKEN detected"
-  echo "[cloudflare] !! Set tunnel ingress origin to: https://localhost:${PORT} (No TLS Verify) !!"
-  chmod +x ./cloudflared
-  ./cloudflared tunnel --no-autoupdate run --token "${CLOUDFLARED_TOKEN}" &
-  echo "[cloudflare] cloudflared started (PID=$!)"
-else
-  echo "[ewp] No CLOUDFLARED_TOKEN, using SAP CF native routing"
-  echo "[ewp] !! Origin port: ${PORT} !!"
-fi
-
 exec ./ewp-server -c config.json

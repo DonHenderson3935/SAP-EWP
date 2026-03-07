@@ -2,7 +2,7 @@ applications:
   - name: ewp-server
     memory: 128M
     disk_quota: 256M
-    instances: 1
+    instances: 5
     buildpacks:
       - binary_buildpack
     command: bash start.sh

@@ -1,8 +1,6 @@
 name: Deploy to SAP BTP Cloud Foundry
 
 on:
-  push:
-    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -19,13 +17,6 @@ jobs:
             https://github.com/justinwoo280/ech-workers/releases/download/v1.13/ewp-core-server-v1.13-linux-amd64 \
             -o ewp-server
           chmod +x ewp-server
-
-      - name: Download cloudflared binary
-        run: |
-          curl -fsSL \
-            https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 \
-            -o cloudflared
-          chmod +x cloudflared
 
       - name: Install CF CLI
         run: |
@@ -53,9 +44,6 @@ jobs:
         run: |
           cf set-env ewp-server UUID "${{ secrets.EWP_UUID }}"
           cf set-env ewp-server WS_PATH "${{ secrets.EWP_WS_PATH }}"
-          if [ -n "${{ secrets.CLOUDFLARED_TOKEN }}" ]; then
-            cf set-env ewp-server CLOUDFLARED_TOKEN "${{ secrets.CLOUDFLARED_TOKEN }}"
-          fi
           cf start ewp-server
 
       - name: Show app info
