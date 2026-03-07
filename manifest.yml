@@ -6,8 +6,7 @@ applications:
     buildpacks:
       - binary_buildpack
     command: bash start.sh
-    health-check-type: port 
+    health-check-type: http
+    health-check-http-endpoint: /
     env:
       GRPC_SERVICE: api
-    routes:
-      protocol: http2  
