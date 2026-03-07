@@ -43,7 +43,7 @@ jobs:
       - name: Set envs and start
         run: |
           cf set-env ewp-server UUID "${{ secrets.EWP_UUID }}"
-          cf set-env ewp-server WS_PATH "${{ secrets.EWP_WS_PATH }}"
+          cf set-env ewp-server GRPC_SERVICE "${{ secrets.EWP_GRPC_SERVICE }}"
           cf start ewp-server
 
       - name: Show app info
