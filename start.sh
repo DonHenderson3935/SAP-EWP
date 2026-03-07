@@ -3,9 +3,9 @@ set -e
 
 UUID="${UUID:-d342d11e-d424-4583-b36e-524ab1f0afa4}"
 PORT="${PORT:-8080}"
-WS_PATH="${WS_PATH:-/}"
+GRPC_SERVICE="${GRPC_SERVICE:-api}"
 
-echo "[ewp] PORT=${PORT} WS_PATH=${WS_PATH}"
+echo "[ewp] PORT=${PORT} SERVICENAME=${GRPC_SERVICE}"
 
 cat > config.json << CFEOF
 {
@@ -13,8 +13,8 @@ cat > config.json << CFEOF
   "listener": {
     "port": ${PORT},
     "address": "0.0.0.0",
-    "modes": ["ws"],
-    "ws_path": "${WS_PATH}"
+    "modes": ["grpc"],
+    "grpc_service": "${GRPC_SERVICE}"
   },
   "protocol": {
     "type": "ewp",
