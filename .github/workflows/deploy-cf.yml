@@ -32,10 +32,11 @@ jobs:
         run: |
           cf set-env ewp-server UUID "${{ secrets.EWP_UUID }}"
           cf set-env ewp-server GRPC_SERVICE "${{ secrets.EWP_GRPC_SERVICE }}"
+          
       - name: Map route with HTTP/2 backend
         run: |
-          CF_DOMAIN=$(echo "${{ secrets.CF_API }}" | sed 's|https://api\.|cfapps.|')
-          cf map-route ewp-server "$CF_DOMAIN" --hostname ewp-server --app-protocol http2   
+          CF_DOMAIN=$(echo "${{ secrets.CF_API }}" | sed 's|https://api\.cf\.|cfapps.|')
+          cf map-route ewp-server "$CF_DOMAIN" --hostname ewp-server --app-protocol http2
           
       - name: Start app
         run: cf start ewp-server
