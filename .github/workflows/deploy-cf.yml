@@ -35,7 +35,8 @@ jobs:
       - name: Map route with HTTP/2 backend
         run: |
           CF_DOMAIN=$(echo "${{ secrets.CF_API }}" | sed 's|https://api\.|cfapps.|')
-          cf map-route ewp-server "$CF_DOMAIN" --hostname ewp-server --destination-protocol http2
+          cf map-route ewp-server "$CF_DOMAIN" --hostname ewp-server --app-protocol http2   
+          
       - name: Start app
         run: cf start ewp-server
       - name: Show app info
